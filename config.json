@@ -3,7 +3,7 @@
     "data_filename":"equity_bond_index.xlsx",
     "a_init":0.2,
     "b_init":200,
-    "num_of_simulations":50,
+    "num_of_simulations":200,
     "time_horizon":10,
     "init_price":100
   },

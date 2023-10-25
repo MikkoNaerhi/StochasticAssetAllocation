@@ -22,7 +22,7 @@ def load_config(file_name:str) -> dict:
         return json.load(f)
 
 def prepare_optimization_data(
-    opt_params: dict,
+    params: dict,
     equity_return_simulations: pd.DataFrame,
     bond_return_simulations: pd.DataFrame
 ) -> Tuple[int,int,float,float,dict]:
@@ -30,7 +30,7 @@ def prepare_optimization_data(
     
     Parameters:
     -----------
-        opt_params: Dictionary of optimization parameters.
+        opt_params: Dictionary of parameters.
         equity_return_simulations: DataFrame containing equity return simulations.
         bond_return_simulations: DataFrame containing bond return simulations.
             
@@ -38,18 +38,26 @@ def prepare_optimization_data(
     --------
         Tuple containing T, S, SR, sr0, and data.
     """
-    N = opt_params['N']
-    T = opt_params['T']
-    S = opt_params['S']
-    SR = opt_params['SR']
-    sr0 = opt_params['sr0']
-    pr = opt_params['pr']
-    i0 = opt_params['i0']
-    l = opt_params['l']
-    L0 = opt_params['L0']
-    alpha = opt_params['alpha']
-    p_mean = opt_params['p_mean']
-    w = opt_params['w']
+    N = params['optimization_params']['N']
+    T = params['optimization_params']['T']
+    S = params['optimization_params']['S']
+    SR = params['optimization_params']['SR']
+    sr0 = params['optimization_params']['sr0']
+    pr = params['optimization_params']['pr']
+    i0 = params['optimization_params']['i0']
+    l = params['optimization_params']['l']
+    L0 = params['optimization_params']['L0']
+    alpha = params['optimization_params']['alpha']
+    p_mean = params['optimization_params']['p_mean']
+    w = params['optimization_params']['w']
+
+    # Define max values for time horizon (T) and number of simulations (S)
+    max_time_horizon = (params['simulation_params']['time_horizon']*4)-1
+    max_num_of_sims = (params['simulation_params']['num_of_simulations'])-1
+
+    assert T < max_time_horizon, f"Parameter value {T} is invalid, should be at most {max_time_horizon}"
+    assert S < max_num_of_sims, f"Parameter value {S} is invalid, should be at most {max_num_of_sims}"
+    assert N == 2, f"Parameter value {N} is invalid, should be equal to 2"
 
     data = {None: {
         'N': {None: N},
@@ -102,7 +110,7 @@ def main():
     # ------------------------------------------------
 
     T, S, SR, sr0, data = prepare_optimization_data(
-        opt_params=config['optimization_params'],
+        params=config,
         equity_return_simulations=equity_return_simulations,
         bond_return_simulations=bond_return_simulations
     )

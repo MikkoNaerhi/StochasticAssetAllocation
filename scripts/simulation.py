@@ -4,8 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.optimize as optimize
 
-import utils
-
 def read_data(filename:str) -> Tuple[pd.Series, pd.Series]:
     """ Read raw Returns data for equities and bonds.
 
@@ -39,7 +37,6 @@ def quarterly_drift_and_vol(returns: pd.DataFrame) -> Tuple[float, float]:
     quarterly_vol_equity = (np.std(returns) * np.sqrt(252)) / np.sqrt(4)
 
     return (quarterly_drift_equity, quarterly_vol_equity)
-
 
 # --------------------------
 # ---------- BOND ----------
@@ -174,7 +171,6 @@ def brownian_motion(
             simulated_prices[i,j] = simulated_prices[i,j-1] * np.exp(drift_temp*dt + diffusion*np.sqrt(dt))
 
     return simulated_prices
-
 
 def simulate_prices(
     volatility:float,
